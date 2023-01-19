@@ -27,7 +27,7 @@ def main():
         if t.name in DERBY:
             derby_teams.append(t)
 
-    SEASONS = 100000 # number of seasons to simulate
+    SEASONS = 10000 # number of seasons to simulate
     year = 1
     all_seasons = []
     failed = False
