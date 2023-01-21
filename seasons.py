@@ -1,6 +1,7 @@
-from copy import deepcopy
-from pprint import pprint
+
 import pandas as pd
+
+from statistics import mean, median
 
 from teams import Team
 
@@ -193,9 +194,33 @@ class Season:
                 self.least_goals_allowed.append(x)
 
     def set_lig_positions(self):
+        self.__df.sort_values(by=['Points', 'Goal Difference', 'Goals Scored', 'Wins'],
+                       inplace=True, ascending=False, ignore_index=True)
+        self.__df.index += 1
+        total_strength = []
         for t in self.__teams_list:
+            total_strength.append(t.strength)
             x = self.__df.index[self.__df['Teams'] == t.name].tolist()[0]
-            Team.set_lig_position(t, x+1, self.__season_number)
+            if x == 1:
+                t.strength += 3
+            if x == 2:
+                t.strength += 2
+            if x == 3 or x == 4:
+                t.strength += 1
+            if x == 16 or x == 17:
+                t.strength -= 1
+            if x == 18:
+                t.strength -= 2
+            if x == 19:
+                t.strength -= 3
+            Team.set_lig_position(t, x, self.__season_number)
+        t_mean = round(mean(total_strength))
+        t_median = round(median(total_strength))
+        for t in self.__teams_list:
+            if t.strength <= t_mean * 0.15:
+                t.strength = round(t_median)
+            if t.strength >= t_mean * 1.85:
+                t.strength = round(t_median)
 
     def set_season_stats(self):
         self.set_champion()

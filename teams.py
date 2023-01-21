@@ -27,8 +27,13 @@ class Team:
     def __repr__(self):
         return self.name
 
-    def show_strength(self):
+    @property
+    def strength(self):
         return self.__strength
+
+    @strength.setter
+    def strength(self, strength):
+        self.__strength = strength
 
     def set_match_schedule(self, match):
         self.match_schedule.append(match)

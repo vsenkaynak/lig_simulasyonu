@@ -1,16 +1,16 @@
-
-#from IPython.display import HTML, display
+# from IPython.display import HTML, display
 from pprint import pprint
 from random import shuffle
-#from tabulate import tabulate
+# from tabulate import tabulate
 from time import time
 
-from constants import TEAM_LIST, BIG_TEAMS, BALANCED_TEAM_LIST, DERBY
+from constants import TEAM_LIST, BIG_TEAMS, BALANCED_TEAM_LIST, DERBY, ALL_EQUAL
 from games import Game
 from score_list import get_score_list
 from seasons import Season
 from teams import Team
 from write_tables import write_all, get_team_positions, champions, h2h
+
 
 def main():
     print('starting main function')
@@ -19,7 +19,7 @@ def main():
     all_time_scores = get_score_list()
 
     # create team object from list of teams
-    teams_list = [Team(x[0], x[1]) for x in BALANCED_TEAM_LIST]
+    teams_list = [Team(x[0], x[1]) for x in ALL_EQUAL]
 
     # get the derby teams in a list to create head to head tables
     derby_teams = []
@@ -27,11 +27,11 @@ def main():
         if t.name in DERBY:
             derby_teams.append(t)
 
-    SEASONS = 100000 # number of seasons to simulate
+    SEASONS = 1000 # number of seasons to simulate
     year = 1
     all_seasons = []
     failed = False
-
+    total_games = []
     while True:
         shuffle(teams_list)
 
@@ -56,6 +56,7 @@ def main():
             x.set_winner()
             x.add_score(all_time_scores)
             all_games.append(x)
+            total_games.append(x)
 
         # close out season and update stats for the current season
         for t in teams_list:
@@ -65,7 +66,7 @@ def main():
 
         if year >= SEASONS:
             break
-        print(year)
+        #print(year)
         year += 1
 
     print('starting after while loop')
@@ -88,6 +89,9 @@ def main():
         if x == len(derby_teams):
             break
         get_h2h(derby_teams[x:])
+
+    for t in teams_list:
+        print(f'{t.name}: {t.strength}')
 
     end_time2 = time()
     print(f'Time to starting after while loop is {round(end_time2 - start_time2, 3)} seconds')
@@ -115,6 +119,5 @@ def get_h2h(teams_list):
         h2h(game_list)
 
 
-if __name__  == '__main__':
+if __name__ == '__main__':
     main()
-

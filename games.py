@@ -58,8 +58,8 @@ class Game:
         Team.set_goals_allowed(self._away_team, h_goal)
 
     def set_odds(self):
-        h_str = Team.show_strength(self._home_team) * 1.2
-        a_str = Team.show_strength(self._away_team) * .8
+        h_str = self._home_team.strength * 1.2
+        a_str = self._away_team.strength * .8
         divider = h_str + a_str
         self._h_win_odd = round((h_str * 100 / divider) * .8)
         self._a_win_odd = round((a_str * 100 / divider) * .8)
@@ -76,8 +76,8 @@ class Game:
             self._a_win_odd = 0
 
     def set_winner(self):
-        d = range(self._h_win_odd + 1, self._h_win_odd + 26)
-        a = range(self._h_win_odd + 26, 101)
+        d = range(self._h_win_odd + 1, self._h_win_odd + 21)
+        a = range(self._h_win_odd + 21, 101)
         win_number = choice(range(1, 101))
         if win_number in a:
             self._winner = 'away'
